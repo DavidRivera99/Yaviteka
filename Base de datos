@@ -1,0 +1,154 @@
+CREATE TABLE usuario
+(
+    id_usuario serial NOT NULL PRIMARY KEY, 
+    cedula serial not null,
+    nombre varchar(50), 
+    apellido varchar(50),
+    nombre_usuario varchar(100) , 
+    contraseña varchar(15),
+    id_tipo_usuario integer
+)
+
+CREATE TABLE tipo_usuario
+(
+    id_tipo_usuario serial NOT NULL PRIMARY KEY, 
+	tipo_usuario varchar(50)
+)
+ALTER TABLE usuario ADD FOREIGN KEY (id_tipo_usuario) REFERENCES tipo_usuario (id_tipo_usuario);
+
+CREATE TABLE prestamo
+(
+    id_prestamo serial NOT NULL PRIMARY KEY, 
+    id_usuario integer not null,
+	fecha_salida date,
+	fecha_maxima_devolucion date
+)
+ALTER TABLE prestamo ADD FOREIGN KEY (id_usuario) REFERENCES usuario (id_usuario);
+CREATE TABLE detalle_prestamo
+(
+    id_detalle_prestamo serial NOT NULL PRIMARY KEY, 
+    id_prestamo integer not null,
+	id_libro integer,
+	fecha_devolucion date
+)
+ALTER TABLE detalle_prestamo ADD FOREIGN KEY (id_prestamo) REFERENCES prestamo (id_prestamo);
+ALTER TABLE detalle_prestamo ADD FOREIGN KEY (id_libro) REFERENCES libro (id_libro);
+CREATE TABLE libro
+(
+    id_libro serial NOT NULL PRIMARY KEY, 
+    codigo_libro varchar(50),
+    nombre_libro varchar(50),
+    id_editorial integer,
+    id_autor integer,
+	fecha_publicacion date,
+    id_genero integer,
+    id_estado_conservacion integer,
+    cantidad integer
+)
+
+CREATE TABLE genero
+(
+    id_genero serial NOT NULL PRIMARY KEY, 
+    genero varchar(50)
+)
+CREATE TABLE estado_conservacion
+(
+    id_estado_conservacion serial NOT NULL PRIMARY KEY, 
+    estado_conservacion varchar(50)
+)
+CREATE TABLE editorial
+(
+    id_editorial serial NOT NULL PRIMARY KEY, 
+    nombre_editorial varchar(50)
+)
+
+CREATE TABLE autores
+(
+    id_autor serial NOT NULL PRIMARY KEY, 
+    nombre_autor varchar(50)
+)
+
+ALTER TABLE libro ADD FOREIGN KEY (id_estado_conservacion) REFERENCES estado_conservacion (id_estado_conservacion)
+
+ALTER TABLE libro ADD FOREIGN KEY (id_autor) REFERENCES autores (id_autor)
+ALTER TABLE libro ADD FOREIGN KEY (id_editorial) REFERENCES editorial (id_editorial)
+ALTER TABLE libro ADD FOREIGN KEY (id_genero) REFERENCES genero (id_genero)
+
+INSERT INTO  usuario values (001,'1725078909','David','Rivera','eds.rivera','drsilva99',001)
+INSERT INTO  usuario values (002,'1725077774','Mauricio','Prieto','m.prieto','mprieto19',002)
+INSERT INTO  usuario values (003,'1725021233','Carlos','Osorio','c.osorio','cosorio52',001)
+INSERT INTO  usuario values (004,'1725021233','Mario','Soledispa','m.soledispa','msoledispa',001)
+INSERT INTO  usuario values (005,'1725012345','Jose','Rios','j.rios','jrios',003)
+INSERT INTO  usuario values (006,'1725011234','Maria','Fuentes','m.fuentes','m.fuentes',001)
+INSERT INTO  usuario values (007,'1725045465','Lizbeth','Rojas','l.rojas','lrojas',001)
+INSERT INTO  usuario values (008,'1725012156','Gorky','Estrella','g.estrella','gestrella',002)
+INSERT INTO  usuario values (009,'1725123245','Juan','Lemma','j.lemma','jlemma',001)
+INSERT INTO  usuario values (010,'1725012356','Geovany','Proaño','g.proaño','jproaño',002)
+select id_usuario,cedula,nombre,apellido,nombre_usuario,contraseña,id_tipo_usuario from usuario
+
+INSERT INTO  tipo_usuario values (001,'Estudiante')
+INSERT INTO  tipo_usuario values (002,'Docente')
+INSERT INTO  tipo_usuario values (003,'Administrador')
+select id_tipo_usuario,tipo_usuario from tipo_usuario
+
+INSERT INTO  prestamo values (001,002,'11/07/2019','12/07/2019')
+INSERT INTO  prestamo values (002,001,'10/07/2019','15/07/2019')
+INSERT INTO  prestamo values (003,004,'01/07/2019','11/07/2019')
+INSERT INTO  prestamo values (004,006,'05/07/2019','12/07/2019')
+INSERT INTO  prestamo values (005,001,'12/07/2019','20/07/2019')
+INSERT INTO  prestamo values (006,003,'04/07/2019','12/07/2019')
+INSERT INTO  prestamo values (007,007,'07/07/2019','17/07/2019')
+INSERT INTO  prestamo values (008,008,'05/07/2019','15/07/2019')
+INSERT INTO  prestamo values (009,010,'10/07/2019','20/07/2019')
+INSERT INTO  prestamo values (010,009,'09/07/2019','19/07/2019')
+select id_prestamo,id_usuario,fecha_salida,fecha_maxima_devolucion from prestamo
+
+INSERT INTO  detalle_prestamo values (001,001,001,'12/07/2019')
+INSERT INTO  detalle_prestamo values (002,002,002,'11/07/2019')
+INSERT INTO  detalle_prestamo values (003,003,001,'10/07/2019')
+INSERT INTO  detalle_prestamo values (004,004,010,'09/07/2019')
+INSERT INTO  detalle_prestamo values (005,005,005,'10/07/2019')
+INSERT INTO  detalle_prestamo values (006,006,003,'11/07/2019')
+INSERT INTO  detalle_prestamo values (007,007,006,'12/07/2019')
+INSERT INTO  detalle_prestamo values (008,008,009,'13/07/2019')
+INSERT INTO  detalle_prestamo values (009,009,008,'15/07/2019')
+INSERT INTO  detalle_prestamo values (010,010,007,'17/07/2019')
+select id_detalle_prestamo,id_prestamo,id_libro,fecha_devolucion from detalle_prestamo
+
+
+INSERT INTO  libro values (001,'abc1','POO',001,005,'12/07/2000',001,001,3)
+INSERT INTO  libro values (002,'abc2','Trigonometria de Granville',005,002,'12/07/1988',002,001,5)
+INSERT INTO  libro values (003,'abc3','Trigonometria de Pitagoras',005,001,'12/07/1998',002,001,2)
+INSERT INTO  libro values (004,'abc4','PHP para noobs',003,005,'12/07/2010',001,001,4)
+INSERT INTO  libro values (005,'abc5','Python Basico I',002,005,'12/07/2009',001,002,1)
+INSERT INTO  libro values (006,'abc6','AdobeF Manual',001,004,'12/07/2000',004,002,3)
+INSERT INTO  libro values (007,'abc7','SWEBOOK',004,003,'12/07/2000',005,001,14)
+INSERT INTO  libro values (008,'abc8','Tipos De Comunicacion',003,004,'12/07/2000',003,001,2)
+INSERT INTO  libro values (009,'abc9','Scrum desde las Trincheras',004,003,'12/07/2000',005,001,5)
+INSERT INTO  libro values (010,'abc10','Comunicacion Basica I',003,003,'12/07/2000',003,001,3)
+select id_libro,codigo_libro,nombre_libro,id_editorial,id_autor,fecha_publicacion,id_genero,id_estado_conservacion,cantidad from libro
+
+INSERT INTO  genero values (001,'Informatica')
+INSERT INTO  genero values (002,'Matematica')
+INSERT INTO  genero values (003,'Lenguaje')
+INSERT INTO  genero values (004,'Diseño Grafico')
+INSERT INTO  genero values (005,'Metodologias y Analisis')
+select id_genero,genero from genero
+
+INSERT INTO  estado_conservacion values (001,'Activo')
+INSERT INTO  estado_conservacion values (002,'Inctivo')
+select id_estado_conservacion,estado_conservacion from estado_conservacion
+
+INSERT INTO  editorial values (001,'CNN')
+INSERT INTO  editorial values (002,'Solaris')
+INSERT INTO  editorial values (003,'EducaT')
+INSERT INTO  editorial values (004,'MetoAnalisis')
+INSERT INTO  editorial values (005,'Matematik')
+select id_editorial,nombre_editorial from editorial
+
+INSERT INTO  autores values (001,'Pitagoras')
+INSERT INTO  autores values (002,'Granville')
+INSERT INTO  autores values (003,'Marco Sanchez')
+INSERT INTO  autores values (004,'Jose Julian')
+INSERT INTO  autores values (005,'Diego Caiza')
+select id_autor,nombre_autor from autores
